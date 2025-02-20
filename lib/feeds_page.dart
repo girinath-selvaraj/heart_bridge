@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heart_bridge/history_page.dart';
+import 'package:heart_bridge/login_screen_donor.dart';
 
 class FeedsPage extends StatelessWidget {
   @override
@@ -8,13 +9,12 @@ class FeedsPage extends StatelessWidget {
     return Scaffold(
       appBar: AppBar(
         title: Text("Donor Feeds"),
-        backgroundColor: Colors.purple.shade700,
+        backgroundColor: Colors.purple,
       ),
       drawer: Drawer(
         child: Column(
           children: [
             DrawerHeader(
-              decoration: BoxDecoration(color: Colors.purple.shade700),
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
@@ -52,7 +52,10 @@ class FeedsPage extends StatelessWidget {
               leading: Icon(Icons.logout),
               title: Text("Logout"),
               onTap: () {
-                Navigator.pop(context);
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => LoginScreenDonor()),
+                );
               },
             ),
           ],
@@ -97,34 +100,8 @@ class FeedsPage extends StatelessWidget {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          "We need your support! Help us provide food and education to orphaned children. Every contribution makes a difference. ❤️",
-                          style: TextStyle(fontSize: 16.sp, color: Colors.grey[800]),
-                        ),
-                        SizedBox(height: 10.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {
-                                // Implement donation functionality here
-                              },
-                              child: Text("Donate Now"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                              ),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {
-                                // Implement trust information here
-                              },
-                              child: Text("Know About Trust"),
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                              ),
-                            ),
-                          ],
+                          "We need your support! Help us provide food and education to orphaned children. Every contribution makes a difference.❤️",
+                          style: TextStyle(fontSize: 16.sp, color: Colors.black),
                         ),
                         SizedBox(height: 10.h),
                         ElevatedButton.icon(
@@ -132,11 +109,37 @@ class FeedsPage extends StatelessWidget {
                             // Implement location fetching here
                           },
                           icon: Icon(Icons.location_on, color: Colors.white),
-                          label: Text("View Location"),
+                          label: Text("View Location",style: TextStyle(color: Colors.white)),
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.purple.shade700,
+                            backgroundColor: Colors.purple,
                             padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
                           ),
+                        ),
+                        SizedBox(height: 10.h),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: [
+                            ElevatedButton(
+                              onPressed: () {
+                                // Implement donate now action
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                              ),
+                              child: Text("Donate Now", style: TextStyle(color: Colors.white)),
+                            ),
+                            ElevatedButton(
+                              onPressed: () {
+                                // Implement know about trust action
+                              },
+                              style: ElevatedButton.styleFrom(
+                                backgroundColor: Colors.black,
+                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
+                              ),
+                              child: Text("Know About Trust", style: TextStyle(color: Colors.white)),
+                            ),
+                          ],
                         ),
                       ],
                     ),
@@ -151,7 +154,7 @@ class FeedsPage extends StatelessWidget {
                           onPressed: () {},
                         ),
                         IconButton(
-                          icon: Icon(Icons.share, color: Colors.green),
+                          icon: Icon(Icons.share, color: Colors.black),
                           onPressed: () {},
                         ),
                       ],
