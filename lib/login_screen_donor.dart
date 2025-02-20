@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:heart_bridge/feeds_page.dart';
+import 'feeds_page.dart';
+import 'register_screen.dart';
 
-class RegisterScreen extends StatelessWidget {
+class LoginScreenDonor extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -22,7 +25,7 @@ class RegisterScreen extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    "Create Your Account",
+                    "Donor Login",
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
@@ -31,30 +34,6 @@ class RegisterScreen extends StatelessWidget {
                   ),
                 ),
                 SizedBox(height: 20.h),
-                Text("First Name", style: TextStyle(color: Colors.white)),
-                TextField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10.h),
-                Text("Last Name", style: TextStyle(color: Colors.white)),
-                TextField(
-                  decoration: InputDecoration(
-                    filled: true,
-                    fillColor: Colors.white,
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(10.r),
-                      borderSide: BorderSide.none,
-                    ),
-                  ),
-                ),
-                SizedBox(height: 10.h),
                 Text("Email", style: TextStyle(color: Colors.white)),
                 TextField(
                   decoration: InputDecoration(
@@ -81,12 +60,29 @@ class RegisterScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => FeedsPage()),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple.shade700,
                     padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 15.h),
                   ),
-                  child: Text("Sign Up", style: TextStyle(color: Colors.white)),
+                  child: Text("Login", style: TextStyle(color: Colors.white)),
+                ),
+                SizedBox(height: 20.h),
+                Center(
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterScreen()),
+                      );
+                    },
+                    child: Text("Create an Account", style: TextStyle(color: Colors.white)),
+                  ),
                 ),
               ],
             ),

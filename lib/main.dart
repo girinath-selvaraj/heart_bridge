@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heart_bridge/onboarding_screen.dart';
+import 'second_screen.dart';
+import 'login_screen_donor.dart';
+import 'login_screen_orphanage.dart';
 
 
 void main() {
@@ -23,11 +26,11 @@ class MyApp extends StatelessWidget {
             ),
           ),
           textTheme: TextTheme(
-            bodyLarge: TextStyle(color: Colors.purpleAccent),
+            bodyLarge: TextStyle(color: Colors.white),
             bodyMedium: TextStyle(color: Colors.white),
           ),
         ),
-        home: OnboardingScreen(),
+        home: OnboardingScreen(), // Updated to use OnboardingScreen as the home screen
       ),
     );
   }

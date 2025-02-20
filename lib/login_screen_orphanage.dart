@@ -1,11 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'register_screen.dart'; // Import the RegisterScreen
+import 'package:heart_bridge/orphanage_dashboard.dart';
+import 'register_screen.dart';
 
-class LoginScreen extends StatelessWidget {
-  final String role;
-  LoginScreen({required this.role});
-
+class LoginScreenOrphanage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +24,7 @@ class LoginScreen extends StatelessWidget {
               children: [
                 Center(
                   child: Text(
-                    "Login to Your Account",
+                    "Orphanage Login",
                     style: TextStyle(
                       fontSize: 22.sp,
                       fontWeight: FontWeight.bold,
@@ -61,7 +59,12 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 ElevatedButton(
-                  onPressed: () {},
+                  onPressed: () {
+                    Navigator.pushReplacement(
+                      context,
+                      MaterialPageRoute(builder: (context) => OrphanageDashboard()),
+                    );
+                  },
                   style: ElevatedButton.styleFrom(
                     backgroundColor: Colors.purple.shade700,
                     padding: EdgeInsets.symmetric(horizontal: 30.w, vertical: 15.h),
@@ -70,18 +73,14 @@ class LoginScreen extends StatelessWidget {
                 ),
                 SizedBox(height: 20.h),
                 Center(
-                  child: Column(
-                    children: [
-                      TextButton(
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => RegisterScreen()),
-                          );
-                        },
-                        child: Text("Create an Account", style: TextStyle(color: Colors.white)),
-                      ),
-                    ],
+                  child: TextButton(
+                    onPressed: () {
+                      Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => RegisterScreen()),
+                      );
+                    },
+                    child: Text("Create an Account", style: TextStyle(color: Colors.white)),
                   ),
                 ),
               ],
