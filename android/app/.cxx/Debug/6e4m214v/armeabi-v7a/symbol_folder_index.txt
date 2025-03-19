@@ -1,0 +1,1 @@
+D:\Projects\Android\flutter\heart_bridge\build\app\intermediates\cxx\Debug\6e4m214v\obj\armeabi-v7a

@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "830069791687",
+    "project_id": "heart-bridge-2025",
+    "storage_bucket": "heart-bridge-2025.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:830069791687:android:057ead0b5ccce801ee57e2",
+        "android_client_info": {
+          "package_name": "com.heartbridge.heart_bridge"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD78nsG9qZ_XXLuoZfnl3-6apbIOH3D5lQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -3,6 +3,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heart_bridge/history_page.dart';
 import 'package:heart_bridge/login_screen_donor.dart';
 import 'package:heart_bridge/find_orphanage_page.dart';
+import 'package:heart_bridge/settings_page.dart';
 
 class FeedsPage extends StatelessWidget {
   @override
@@ -22,7 +23,7 @@ class FeedsPage extends StatelessWidget {
                 children: [
                   CircleAvatar(
                     radius: 40,
-                    backgroundImage: AssetImage('assets/profile.jpg'), // Replace with actual image
+                    backgroundImage: AssetImage('assets/profile.jpg'),
                   ),
                   SizedBox(height: 10),
                   Text("Donor Name", style: TextStyle(color: Colors.white, fontSize: 20)),
@@ -57,7 +58,12 @@ class FeedsPage extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.settings),
               title: Text("Settings"),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(builder: (context) => SettingsPage()),
+                );
+              },
             ),
             Spacer(),
             ListTile(
@@ -76,7 +82,7 @@ class FeedsPage extends StatelessWidget {
       body: Padding(
         padding: EdgeInsets.all(10.w),
         child: ListView.builder(
-          itemCount: 5, // Example count, replace with actual data count
+          itemCount: 5,
           itemBuilder: (context, index) {
             return Card(
               shape: RoundedRectangleBorder(
@@ -93,7 +99,7 @@ class FeedsPage extends StatelessWidget {
                       children: [
                         CircleAvatar(
                           radius: 25,
-                          backgroundImage: AssetImage('assets/profile.jpg'), // Replace with actual profile image
+                          backgroundImage: AssetImage('assets/profile.jpg'),
                         ),
                         SizedBox(width: 10.w),
                         Text("Orphanage Name", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
@@ -101,7 +107,7 @@ class FeedsPage extends StatelessWidget {
                     ),
                   ),
                   Image.asset(
-                    'assets/img1.jpg', // Replace with actual post image
+                    'assets/img1.jpg',
                     width: double.infinity,
                     height: 200.h,
                     fit: BoxFit.cover,
@@ -117,9 +123,7 @@ class FeedsPage extends StatelessWidget {
                         ),
                         SizedBox(height: 10.h),
                         ElevatedButton.icon(
-                          onPressed: () {
-                            // Implement location fetching here
-                          },
+                          onPressed: () {},
                           icon: Icon(Icons.location_on, color: Colors.white),
                           label: Text("View Location"),
                           style: ElevatedButton.styleFrom(
@@ -132,9 +136,7 @@ class FeedsPage extends StatelessWidget {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             ElevatedButton(
-                              onPressed: () {
-                                // Implement donate now action
-                              },
+                              onPressed: () {},
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.green,
                                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -142,9 +144,7 @@ class FeedsPage extends StatelessWidget {
                               child: Text("Donate Now", style: TextStyle(color: Colors.white)),
                             ),
                             ElevatedButton(
-                              onPressed: () {
-                                // Implement know about trust action
-                              },
+                              onPressed: () {},
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: Colors.blue,
                                 padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
@@ -152,22 +152,6 @@ class FeedsPage extends StatelessWidget {
                               child: Text("Know About Trust", style: TextStyle(color: Colors.white)),
                             ),
                           ],
-                        ),
-                      ],
-                    ),
-                  ),
-                  Padding(
-                    padding: EdgeInsets.symmetric(horizontal: 10.w),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        IconButton(
-                          icon: Icon(Icons.favorite_border, color: Colors.red),
-                          onPressed: () {},
-                        ),
-                        IconButton(
-                          icon: Icon(Icons.share, color: Colors.green),
-                          onPressed: () {},
                         ),
                       ],
                     ),
