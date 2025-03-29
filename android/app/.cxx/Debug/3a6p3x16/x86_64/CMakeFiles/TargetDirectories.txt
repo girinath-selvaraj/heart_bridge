@@ -1,0 +1,2 @@
+C:/Users/Girinath/StudioProjects/heart_bridge/android/app/.cxx/Debug/3a6p3x16/x86_64/CMakeFiles/edit_cache.dir
+C:/Users/Girinath/StudioProjects/heart_bridge/android/app/.cxx/Debug/3a6p3x16/x86_64/CMakeFiles/rebuild_cache.dir
