@@ -1,166 +1,135 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:heart_bridge/history_page.dart';
-import 'package:heart_bridge/login_screen_donor.dart';
-import 'package:heart_bridge/find_orphanage_page.dart';
-import 'package:heart_bridge/settings_page.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 
-class FeedsPage extends StatelessWidget {
+class FeedsPage extends StatefulWidget {
+  @override
+  _FeedsPageState createState() => _FeedsPageState();
+}
+
+class _FeedsPageState extends State<FeedsPage> {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text("Donor Feeds"),
-        backgroundColor: Colors.purple.shade700,
+        title: Text('Orphanage Needs'),
+        backgroundColor: Colors.blue.shade700,
       ),
-      drawer: Drawer(
+      drawer: _buildDrawer(),
+      body: StreamBuilder(
+        stream: FirebaseFirestore.instance.collection('posts').orderBy('timestamp', descending: true).snapshots(),
+        builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.connectionState == ConnectionState.waiting) {
+            return Center(child: CircularProgressIndicator());
+          }
+          if (snapshot.hasError) {
+            return Center(child: Text('Error loading posts'));
+          }
+          if (!snapshot.hasData || snapshot.data!.docs.isEmpty) {
+            return Center(child: Text('No posts available.'));
+          }
+
+          return ListView.builder(
+            itemCount: snapshot.data!.docs.length,
+            itemBuilder: (context, index) {
+              var post = snapshot.data!.docs[index];
+              return _buildPostCard(post);
+            },
+          );
+        },
+      ),
+    );
+  }
+
+  Widget _buildPostCard(DocumentSnapshot post) {
+    return Card(
+      margin: EdgeInsets.symmetric(vertical: 10, horizontal: 16),
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: Padding(
+        padding: EdgeInsets.all(16),
         child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            DrawerHeader(
-              decoration: BoxDecoration(color: Colors.purple.shade700),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.center,
-                children: [
-                  CircleAvatar(
-                    radius: 40,
-                    backgroundImage: AssetImage('assets/profile.jpg'),
-                  ),
-                  SizedBox(height: 10),
-                  Text("Donor Name", style: TextStyle(color: Colors.white, fontSize: 20)),
-                ],
+            Text(
+              post['title'] ?? 'No Title',
+              style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            ),
+            SizedBox(height: 8),
+            Text(post['description'] ?? 'No Description'),
+            if (post['imageUrl'] != null)
+              Padding(
+                padding: EdgeInsets.symmetric(vertical: 10),
+                child: Image.network(post['imageUrl']),
               ),
+            SizedBox(height: 8),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Text('Posted by: ${post['orphanageName']}'),
+                Text('${post['timestamp'].toDate()}'),
+              ],
             ),
-            ListTile(
-              leading: Icon(Icons.home),
-              title: Text("Home"),
-              onTap: () {},
-            ),
-            ListTile(
-              leading: Icon(Icons.history),
-              title: Text("Donated History"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => HistoryPage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.search),
-              title: Text("Find Orphanage"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => FindOrphanagePage()),
-                );
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.settings),
-              title: Text("Settings"),
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(builder: (context) => SettingsPage()),
-                );
-              },
-            ),
-            Spacer(),
-            ListTile(
-              leading: Icon(Icons.logout),
-              title: Text("Logout"),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginScreenDonor()),
-                );
-              },
+            SizedBox(height: 10),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.end,
+              children: [
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Donate'),
+                ),
+                SizedBox(width: 10),
+                ElevatedButton(
+                  onPressed: () {},
+                  child: Text('Share'),
+                ),
+              ],
             ),
           ],
         ),
       ),
-      body: Padding(
-        padding: EdgeInsets.all(10.w),
-        child: ListView.builder(
-          itemCount: 5,
-          itemBuilder: (context, index) {
-            return Card(
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(10.r),
-              ),
-              color: Colors.white,
-              margin: EdgeInsets.symmetric(vertical: 10.h),
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Padding(
-                    padding: EdgeInsets.all(10.w),
-                    child: Row(
-                      children: [
-                        CircleAvatar(
-                          radius: 25,
-                          backgroundImage: AssetImage('assets/profile.jpg'),
-                        ),
-                        SizedBox(width: 10.w),
-                        Text("Orphanage Name", style: TextStyle(fontWeight: FontWeight.bold, color: Colors.black)),
-                      ],
-                    ),
-                  ),
-                  Image.asset(
-                    'assets/img1.jpg',
-                    width: double.infinity,
-                    height: 200.h,
-                    fit: BoxFit.cover,
-                  ),
-                  Padding(
-                    padding: EdgeInsets.all(10.w),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        Text(
-                          "We need your support! Help us provide food and education to orphaned children. Every contribution makes a difference. ❤️",
-                          style: TextStyle(fontSize: 16.sp, color: Colors.grey[800]),
-                        ),
-                        SizedBox(height: 10.h),
-                        ElevatedButton.icon(
-                          onPressed: () {},
-                          icon: Icon(Icons.location_on, color: Colors.white),
-                          label: Text("View Location"),
-                          style: ElevatedButton.styleFrom(
-                            backgroundColor: Colors.purple.shade700,
-                            padding: EdgeInsets.symmetric(horizontal: 10.w, vertical: 10.h),
-                          ),
-                        ),
-                        SizedBox(height: 10.h),
-                        Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                          children: [
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.green,
-                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                              ),
-                              child: Text("Donate Now", style: TextStyle(color: Colors.white)),
-                            ),
-                            ElevatedButton(
-                              onPressed: () {},
-                              style: ElevatedButton.styleFrom(
-                                backgroundColor: Colors.blue,
-                                padding: EdgeInsets.symmetric(horizontal: 20.w, vertical: 10.h),
-                              ),
-                              child: Text("Know About Trust", style: TextStyle(color: Colors.white)),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            );
-          },
-        ),
+    );
+  }
+
+  Widget _buildDrawer() {
+    final user = _auth.currentUser;
+    return Drawer(
+      child: Column(
+        children: [
+          UserAccountsDrawerHeader(
+            accountName: Text(user?.displayName ?? 'Donor'),
+            accountEmail: Text(user?.email ?? ''),
+            currentAccountPicture: CircleAvatar(
+              backgroundColor: Colors.white,
+              child: Text(user?.displayName?.substring(0, 1).toUpperCase() ?? '?'),
+            ),
+          ),
+          ListTile(
+            leading: Icon(Icons.home),
+            title: Text('Home'),
+            onTap: () => Navigator.pop(context),
+          ),
+          ListTile(
+            leading: Icon(Icons.history),
+            title: Text('Donation History'),
+            onTap: () {},
+          ),
+          ListTile(
+            leading: Icon(Icons.settings),
+            title: Text('Settings'),
+            onTap: () {},
+          ),
+          Spacer(),
+          ListTile(
+            leading: Icon(Icons.logout),
+            title: Text('Logout'),
+            onTap: () async {
+              await _auth.signOut();
+              Navigator.pushReplacementNamed(context, '/login');
+            },
+          ),
+        ],
       ),
     );
   }
