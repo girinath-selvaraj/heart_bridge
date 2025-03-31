@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:heart_bridge/orphanage_dashboard.dart';
-import 'register_screen.dart';
+import 'package:heart_bridge/orphanage_register_screen.dart';
+import 'orphanage_register_screen.dart';
 
 class LoginScreenOrphanage extends StatelessWidget {
   @override
@@ -77,7 +78,7 @@ class LoginScreenOrphanage extends StatelessWidget {
                     onPressed: () {
                       Navigator.push(
                         context,
-                        MaterialPageRoute(builder: (context) => RegisterScreen()),
+                        MaterialPageRoute(builder: (context) => OrphanageRegisterScreen()),
                       );
                     },
                     child: Text("Create an Account", style: TextStyle(color: Colors.white)),
