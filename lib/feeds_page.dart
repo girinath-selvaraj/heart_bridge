@@ -1,25 +1,48 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'second_screen.dart';
 
-class FeedsPage extends StatefulWidget {
+class DonorFeedsPage extends StatefulWidget {
   @override
-  _FeedsPageState createState() => _FeedsPageState();
+  _DonorFeedsPageState createState() => _DonorFeedsPageState();
 }
 
-class _FeedsPageState extends State<FeedsPage> {
+class _DonorFeedsPageState extends State<DonorFeedsPage> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _logout(BuildContext context) async {
+    await _auth.signOut();
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove('userRole');
+    Navigator.of(context).pushAndRemoveUntil(
+      MaterialPageRoute(builder: (context) => SecondScreen()),
+          (route) => false,
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text('Orphanage Needs'),
-        backgroundColor: Colors.blue.shade700,
+        backgroundColor: Colors.purple.shade700,
+        actions: [
+          IconButton(
+            icon: Icon(Icons.login),
+            onPressed: () {
+              Navigator.pushNamed(context, '/second');
+            },
+          ),
+        ],
       ),
       drawer: _buildDrawer(),
       body: StreamBuilder(
-        stream: FirebaseFirestore.instance.collection('posts').orderBy('timestamp', descending: true).snapshots(),
+        stream: FirebaseFirestore.instance
+            .collection('posts')
+            .orderBy('timestamp', descending: true)
+            .snapshots(),
         builder: (context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.connectionState == ConnectionState.waiting) {
             return Center(child: CircularProgressIndicator());
@@ -102,7 +125,11 @@ class _FeedsPageState extends State<FeedsPage> {
             accountEmail: Text(user?.email ?? ''),
             currentAccountPicture: CircleAvatar(
               backgroundColor: Colors.white,
-              child: Text(user?.displayName?.substring(0, 1).toUpperCase() ?? '?'),
+              child: Text(
+                (user?.displayName?.isNotEmpty == true)
+                    ? user!.displayName!.substring(0, 1).toUpperCase()
+                    : '?',
+              ),
             ),
           ),
           ListTile(
@@ -124,10 +151,7 @@ class _FeedsPageState extends State<FeedsPage> {
           ListTile(
             leading: Icon(Icons.logout),
             title: Text('Logout'),
-            onTap: () async {
-              await _auth.signOut();
-              Navigator.pushReplacementNamed(context, '/login');
-            },
+            onTap: () => _logout(context),
           ),
         ],
       ),

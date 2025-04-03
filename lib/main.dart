@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'firebase_options.dart';
 import 'onboarding_screen.dart';
+import 'orphanage_dashboard.dart';
+import 'login_screen_orphanage.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-// Default to login screen
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -11,7 +13,9 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   runApp(MyApp());
-}class MyApp extends StatelessWidget {
+}
+
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return ScreenUtilInit(
@@ -34,7 +38,7 @@ void main() async {
             bodyMedium: TextStyle(color: Colors.black87),
           ),
         ),
-        home: OnboardingScreen(),
+        home: OnboardingScreen(), // Onboarding acts as the loading screen
       ),
     );
   }

@@ -1,9 +1,23 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'login_screen_orphanage.dart';
 
-
 class OrphanageDashboard extends StatelessWidget {
+  final FirebaseAuth _auth = FirebaseAuth.instance;
+
+  Future<void> _logout(BuildContext context) async {
+    await _auth.signOut();
+
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.setBool('isLoggedIn', false);
+
+    Navigator.pushReplacement(
+      context,
+      MaterialPageRoute(builder: (context) => LoginScreenOrphanage()),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,81 +81,12 @@ class OrphanageDashboard extends StatelessWidget {
             ListTile(
               leading: Icon(Icons.logout),
               title: Text("Logout"),
-              onTap: () {
-                Navigator.pushReplacement(
-                  context,
-                  MaterialPageRoute(builder: (context) => LoginScreenOrphanage()),
-                );
-              },
+              onTap: () => _logout(context),
             ),
           ],
         ),
       ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            Text("Dashboard Overview", style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold)),
-            SizedBox(height: 20),
-
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildDashboardCard('Children', 'children', Colors.blue),
-                _buildDashboardCard('Stocks', 'stocks', Colors.green),
-              ],
-            ),
-            SizedBox(height: 20),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceAround,
-              children: [
-                _buildDashboardCard('Donations', 'donations', Colors.purple),
-                _buildDashboardCard('Expenses', 'expenses', Colors.red),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildDashboardCard(String title, String collectionName, Color color) {
-    return StreamBuilder(
-      stream: FirebaseFirestore.instance.collection(collectionName).snapshots(),
-      builder: (context, snapshot) {
-        if (!snapshot.hasData) {
-          return _dashboardCard(title, 'Loading...', color);
-        }
-
-        int count = snapshot.data!.docs.length;
-        return _dashboardCard(title, count.toString(), color);
-      },
-    );
-  }
-
-  Widget _dashboardCard(String title, String value, Color color) {
-    return Container(
-      width: 150,
-      padding: EdgeInsets.all(20),
-      decoration: BoxDecoration(
-        color: color,
-        borderRadius: BorderRadius.circular(16),
-      ),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: [
-          Text(
-            title,
-            style: TextStyle(color: Colors.white, fontSize: 18, fontWeight: FontWeight.bold),
-          ),
-          SizedBox(height: 10),
-          Text(
-            value,
-            style: TextStyle(color: Colors.white, fontSize: 24, fontWeight: FontWeight.bold),
-          ),
-        ],
-      ),
+      body: Center(child: Text("Welcome to the Orphanage Dashboard")),
     );
   }
 }
