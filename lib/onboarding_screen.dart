@@ -1,8 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:cloud_firestore/cloud_firestore.dart'; // <-- Add this line
+import 'package:shared_preferences/shared_preferences.dart';
+
 import 'feeds_page.dart';
+import 'orphanage_dashboard.dart';
 import 'second_screen.dart';
+
 
 class OnboardingScreen extends StatefulWidget {
   final bool isOrphanageLogin;
@@ -25,7 +30,31 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
   void _checkUserLoggedIn() async {
     await Future.delayed(Duration(seconds: 2)); // Simulating loading
     final user = _auth.currentUser;
+
     if (user != null) {
+      // Check if the user is an orphanage or donor
+      final prefs = await SharedPreferences.getInstance();
+      final userId = user.uid;
+
+      // First check orphanages collection
+      final orphanageSnapshot = await FirebaseFirestore.instance
+          .collection('orphanages')
+          .where('userId', isEqualTo: userId)
+          .get();
+
+      if (orphanageSnapshot.docs.isNotEmpty) {
+        // Save info to prefs
+        prefs.setString('userId', userId);
+        prefs.setBool('isOrphanageLogin', true);
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => OrphanageDashboard()),
+        );
+        return;
+      }
+
+      // Default to donor
+      prefs.setBool('isOrphanageLogin', false);
       Navigator.pushReplacement(
         context,
         MaterialPageRoute(builder: (context) => DonorFeedsPage()),
@@ -34,6 +63,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
       setState(() => isLoading = false);
     }
   }
+
 
   @override
   Widget build(BuildContext context) {
@@ -46,13 +76,12 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Image.asset(
-                'assets/workspace.png', // Replace with your illustration
+                'assets/workspace.png',
                 height: 250.h,
               ),
               SizedBox(height: 30.h),
               Text(
                 "Heart Bridge",
-                textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 22.sp,
                   fontWeight: FontWeight.bold,
@@ -62,11 +91,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
               SizedBox(height: 10.h),
               Text(
                 widget.isOrphanageLogin ? "For Orphanages" : "For Donors",
-                textAlign: TextAlign.center,
-                style: TextStyle(
-                  fontSize: 16.sp,
-                  color: Colors.grey,
-                ),
+                style: TextStyle(fontSize: 16.sp, color: Colors.grey),
               ),
               SizedBox(height: 40.h),
               isLoading
@@ -85,10 +110,7 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     borderRadius: BorderRadius.circular(10.r),
                   ),
                 ),
-                child: Text(
-                  "Get Started",
-                  style: TextStyle(fontSize: 16.sp, color: Colors.white),
-                ),
+                child: Text("Get Started", style: TextStyle(fontSize: 16.sp, color: Colors.white)),
               ),
             ],
           ),
